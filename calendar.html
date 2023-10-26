@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Updated box-shadow */
+            background-color: white;
+            margin: 0 auto; /* Align the table in the center */
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc; /* Add column line */
+        }
+        
+        td {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc; /* Add column line */
+        }
+        
+        .current-day {
+            background-color: #ffcccc;
+            font-weight: bold;
+        }
+        
+        td:hover {
+            background-color: #e6e6e6;
+            cursor: pointer;
+        }
+        
+        .month-row td {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc; /* Add column line */
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <br>
+    <br>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Generate the calendar days using JavaScript -->
+        </tbody>
+    </table>
+    
+    <script>
+        // Get the current date
+        var today = new Date();
+        var currentMonth = today.getMonth();
+        var currentYear = today.getFullYear();
+        
+        // Get the element to display the calendar
+        var calendarBody = document.querySelector('tbody');
+        
+        // Function to generate the calendar
+        function generateCalendar() {
+            // Clear previous calendar
+            calendarBody.innerHTML = '';
+            
+            // Get the number of days in the current month
+            var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Get the first day of the month
+            var firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            
+            // Create calendar rows
+            var row = document.createElement('tr');
+            
+            // Fill in leading empty cells
+            for (var i = 0; i < firstDay; i++) {
+                var cell = document.createElement('td');
+                row.appendChild(cell);
+            }
+            
+            var date = 1;
+            
+            // Fill in calendar cells with dates
+            for (var i = 0; i < 7 - firstDay; i++) {
+                var cell = document.createElement('td');
+                
+                if (date === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    cell.classList.add('current-day');
+                }
+                
+                cell.textContent = date;
+                row.appendChild(cell);
+                date++;
+            }
+            
+            calendarBody.appendChild(row);
+            
+            // Fill in remaining rows
+            while (date <= daysInMonth) {
+                var newRow = document.createElement('tr');
+                
+                for (var i = 0; i < 7; i++) {
+                    if (date > daysInMonth) {
+                        break;
+                    }
+                    
+                    var cell = document.createElement('td');
+                    
+                    if (date === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                        cell.classList.add('current-day');
+                    }
+                    
+                    cell.textContent = date;
+                    newRow.appendChild(cell);
+                    date++;
+                }
+                
+                calendarBody.appendChild(newRow);
+            }
+        }
+        
+        // Generate the calendar when the page loads
+        generateCalendar();
+
+        // Display the month name
+        function displayMonthName() {
+            var monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            var monthName = monthNames[currentMonth];
+            
+            var monthRow = document.createElement('tr');
+            monthRow.classList.add('month-row');
+            
+            var monthCell = document.createElement('td');
+            monthCell.setAttribute('colspan', '7');
+            monthCell.textContent = monthName + ' ' + currentYear;
+            
+            monthRow.appendChild(monthCell);
+            
+            var table = document.querySelector('table');
+            table.insertBefore(monthRow, table.firstChild);
+        }
+        
+        // Call the function to display the month name
+        displayMonthName();
+    </script>
+</body>
+</html>

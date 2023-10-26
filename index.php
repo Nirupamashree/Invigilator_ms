@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="shortcut icon" href="assets/img/favicon.png" type="image/png">
+
+        <!--=============== REMIXICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+        
+        <!--=============== SWIPER CSS ===============-->
+        <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="assets/css/styles.css">
+
+        <title></title>
+    </head>
+    <body>
+        <header class="header" id="header">
+            <nav class="nav container">
+                <a href="#" class="nav__logo">INVIGILATOR MANAGEMENT SYSTEM</a>
+
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                      <li class="nav__item">
+                        <a href="#home" class="nav__link active-link">Home</a>
+                      </li>
+                      <li class="nav__item dropdown">
+                        <a href="#" class="nav__link dropdown-toggle">Portal</a>
+                        <ul class="dropdown-menu">
+                          <li><a href="admin_login.php">Admin portal</a></li>
+                          <li><a href="facultylogin.php">Faculty portal</a></li>
+                        </ul>
+                      </li>
+                      <li class="nav__item">
+                        <a href="#about" class="nav__link">About</a>
+                      </li>
+                      <li class="nav__item">
+                        <a href="#discover" class="nav__link">Services</a>
+                      </li>
+                      <li class="nav__item">
+                        <a href="#place" class="nav__link">Contact</a>
+                      </li>
+                    </ul>
+                  </div>
+                  
+
+                    <div class="nav__dark">
+                        <!-- Theme change button -->
+                        <span class="change-theme-name">Dark mode</span>
+                        <i class="ri-moon-line change-theme" id="theme-button"></i>
+                    </div>
+
+                    <i class="ri-close-line nav__close" id="nav-close"></i>
+                </div>
+
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class="ri-function-line"></i>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <!--==================== HOME ====================-->
+            <section class="home" id="home">
+                <img src="assets/img/amrita_univerty.jpg" alt="" class="home__img">
+
+                <div class="home__container container grid">
+                    <div class="home__data">
+                        <span class="home__data-subtitle"></span>
+                        <h1 class="home__data-title"></b></h1>
+                        
+
+                    </div>
+
+                    <div class="home__social">
+                        <a href="https://www.facebook.com/" target="_blank" class="home__social-link">
+                            <i class="ri-facebook-box-fill"></i>
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank" class="home__social-link">
+                            <i class="ri-instagram-fill"></i>
+                        </a>
+                        <a href="https://twitter.com/" target="_blank" class="home__social-link">
+                            <i class="ri-twitter-fill"></i>
+                        </a>
+                    </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== ABOUT ====================-->
+            <section class="about section" id="about">
+                <div class="about__container container grid">
+                    <div class="about__data">
+                        <h2 class="section__title about__title">WHAT IS <br>IMS?</h2>
+                        <p class="about__description">Invigilation Management System is a software designed to streamline and automate the process of 
+                            supervising exams or assessments. It helps with tasks such as scheduling invigilators, Faculty Swapping, monitoring exam sessions, 
+                            and ensuring the integrity and security of the examination process.
+                        </p>
+                    </div>
+
+                    <div class="about__img">
+                        <div class="about__img-overlay">
+                            <img src="assets/img/image1.png" alt="" class="about__img-one">
+                        </div>
+
+                        <div class="about__img-overlay">
+                            <img src="assets/img/image2.png" alt="" class="about__img-two">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!--==================== DISCOVER ====================-->
+            <section class="discover section" id="discover">
+                <h2 class="section__title">Services provided by<br>IMS</h2>
+                
+                <div class="discover__container container swiper-container">
+                    <div class="swiper-wrapper">
+                        <!--==================== DISCOVER 1 ====================-->
+                        <div class="discover__card swiper-slide">
+                            <img src="assets/img/image4.jpeg" alt="" class="discover__img">
+                            <div class="discover__data">
+                                <h2 class="discover__title"></h2>
+                                <span class="discover__description"></span>
+                            </div>
+                        </div>
+
+                        <!--==================== DISCOVER 2 ====================-->
+                        <div class="discover__card swiper-slide">
+                            <img src="assets/img/image5.png" alt="" class="discover__img">
+                            <div class="discover__data">
+                                <h2 class="discover__title">Personalization</h2>
+                                <span class="discover__description"></span>
+                            </div>
+                        </div>
+
+                        <!--==================== DISCOVER 3 ====================-->
+                        <div class="discover__card swiper-slide">
+                            <img src="assets/img/image6.jpeg" alt="" class="discover__img">
+                            <div class="discover__data">
+                                <h2 class="discover__title">Functionality</h2>
+                                <span class="discover__description"></span>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </section>
+            <!--==================== EXPERIENCE ====================-->
+            <section class="experience section">
+                <div class="experience__container container grid">
+                    <div class="experience__content grid">
+                        <div class="experience__data">
+                            <h2 class="experience__number">200</h2>
+                            <span class="experience__description">Companies visit</span>
+                        </div>
+
+                        <div class="experience__data">
+                            <h2 class="experience__number">Rs 9.2 Lakh</h2>
+                            <span class="experience__description">Average Salary</span>
+                        </div>
+
+                        <div class="experience__data">
+                            <h2 class="experience__number">100%</h2>
+                            <span class="experience__description">Placement</span>
+                        </div>
+                    </div>
+
+                    <div class="experience__img grid">
+                        <div class="experience__overlay">
+                            <img src="assets/img/img5.jpg" alt="" class="experience__img-one">
+                        </div>
+                        
+                        <div class="experience__overlay">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br><br>
+                            <br>
+                            <br>
+                            <img src="assets/img/image3.jpg" alt="" class="experience__img-two">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== VIDEO ====================-->
+            <section class="video section">
+                <h2 class="section__title">Video Tour</h2>
+
+                <div class="video__container container">
+                    <p class="video__description">
+                    </p>
+
+                    <div class="video__content">
+                        <video id="video-file">
+                            <source src="assets/video/amrita1-1.mp4" type="video/mp4">
+                        </video>
+
+                        <button class="button button--flex video__button" id="video-button">
+                            <i class="ri-play-line video__button-icon" id="video-icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== PLACES ====================-->
+        <section class = "place-section" id="place">
+            <h2 class = "section_title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOCATION</h2>
+                    <!--==================== PLACES CARD 1 ====================-->
+                    <div class="mapouter"><div class="gmap_canvas"><iframe width="1150" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=Amrita%20vishwa%20vidyapeetham%20Coimbatore,%20Ettimadai&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://123movies-i.net">123movies new site</a><br><style>.mapouter{position:relative;text-align:right;height:500px;width:1150px;}</style><a href="https://www.embedgooglemap.net"></a><style>.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:1150px}</style></div></div>
+
+            <!--==================== SUBSCRIBE ====================-->
+            <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Registrar's Office : +91-422-2685111<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Campus Director's Office : +91-422-2685010<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dean's Office : +91-422-2685502<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administrative Office : +91-422-2685509</h4>
+            <!--==================== SPONSORS ====================-->
+    
+</section>
+        <!--==================== FOOTER ====================-->
+        <footer class="footer section">
+            <div class="footer__container container grid">
+                <div class="footer__content grid">
+                    <div class="footer__data">
+                        <h3 class="footer__title"></h3>
+                        <p class="footer__description">Get to know <br> about ourselves 
+                        </p>
+                        <div>
+                            <a href="https://www.facebook.com/AmritaUniversity/"" target="_blank" class="footer__social">
+                                <i class="ri-facebook-box-fill"></i>
+                            </a>
+                            <a href="https://twitter.com/AMRITAedu" target="_blank" class="footer__social">
+                                <i class="ri-twitter-fill"></i>
+                            </a>
+                            <a href="https://instagram.com/amritacoimbatorecampus" target="_blank" class="footer__social">
+                                <i class="ri-instagram-fill"></i>
+                            </a>
+                            <a href="https://www.youtube.com/channel/UCVEeVDos5a4S9sMPK4jPUzA" target="_blank" class="footer__social">
+                                <i class="ri-youtube-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+    
+                    </div></div></footer>
+         <!--========== SCROLL UP ==========-->
+        <a href="#" class="scrollup" id="scroll-up">
+            <i class="ri-arrow-up-line scrollup__icon"></i>
+        </a>
+
+        <!--=============== SCROLL REVEAL===============-->
+        <script src="assets/js/scrollreveal.min.js"></script>
+        
+        <!--=============== SWIPER JS ===============-->
+        <script src="assets/js/swiper-bundle.min.js"></script>
+
+        <!--=============== MAIN JS ===============-->
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>

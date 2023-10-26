@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #topFrame {
+      height: 50px;
+      background-color: #f1f1f1;
+      text-align: center;
+      line-height: 50px;
+      position: relative;
+    }
+
+    #topFrame .time {
+      position: absolute;
+      top: 0;
+      right: 20px;
+      font-size: 18px;
+      color: #555;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    #bottomFrame {
+      display: flex;
+      height: calc(100vh - 50px);
+    }
+
+    #leftFrame {
+      width: 20%;
+      background-color: #e0e0e0;
+      padding: 20px;
+    }
+
+    #rightFrame {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    #calendar {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    
+    #targetPage {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+  </style>
+  <script>
+    // Function to update the current time in the top frame
+    function updateTime() {
+      var currentTime = new Date();
+      var hours = currentTime.getHours();
+      var minutes = currentTime.getMinutes();
+      var seconds = currentTime.getSeconds();
+
+      // Add leading zeros if necessary
+      hours = (hours < 10 ? "0" : "") + hours;
+      minutes = (minutes < 10 ? "0" : "") + minutes;
+      seconds = (seconds < 10 ? "0" : "") + seconds;
+
+      var timeString = hours + ":" + minutes + ":" + seconds;
+
+      // Update the time in the top frame
+      var timeElement = document.getElementById("currentTime");
+      if (timeElement) {
+        timeElement.textContent = timeString;
+      }
+    }
+
+    // Update the time every second
+    setInterval(updateTime, 1000);
+
+    // Function to show target page in the right frame
+    function showTargetPage() {
+      document.getElementById("calendar").style.display = "none";
+      document.getElementById("targetPage").style.display = "block";
+    }
+
+    // Function to show calendar in the right frame
+    function showCalendar() {
+      document.getElementById("calendar").style.display = "block";
+      document.getElementById("targetPage").style.display = "none";
+    }
+  </script>
+</head>
+<body>
+  <div id="topFrame">
+    <div class="time" id="currentTime"></div>
+    <h2>ADMIN PORTAL</h2>
+  </div>
+  <div id="bottomFrame">
+    <div id="leftFrame">
+      <a class="button" href="register_form.php" target="targetPage" onclick="showTargetPage()">ADD USERS</a>
+      <a class="button" href="delete_a.php" target="targetPage" onclick="showTargetPage()">DELETE USERS</a>
+      <a class="button" href="f_Table1.php" target="targetPage" onclick="showTargetPage()">VIEW FACULTY TIMETABLE</a>
+      <a class="button" href="invi_schedule1.php" target="calendar" onclick="showCalendar()">CREATE INVIGILATION SCHEDULE</a>
+      <a class="button" href="view_allo.php" target="targetPage" onclick="showTargetPage()">VIEW ALLOCATED SCHEDULE</a>
+      <a class="button" href="invi_delete.php" target="targetPage" onclick="showTargetPage()">DELETE INVIGILATION SCHEDULE</a>
+      <a class="button" href="swap_admin.php" target="targetPage" onclick="showTargetPage()">VIEW SWAPPED SCHEDULE</a>
+      <a class="button" href="bundle_view.php" target="targetPage" onclick="showTargetPage()">VIEW BUNDLE SUBMISSION</a>
+    </div>
+    <div id="rightFrame">
+      <iframe id="calendar" src="calendar.html" name="calendar" style="width: 100%; height: 100%; border: none;"></iframe>
+      <iframe id="targetPage" name="targetPage" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+  </div>
+</body>
+</html>

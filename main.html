@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #topframe {
+            height: 80px;
+            background-color: #f2f2f2;
+            text-align: center;
+            line-height: 80px;
+        }
+        
+        #bottomframe {
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e6e6e6;
+        }
+        
+        #bottomframe .profile {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        
+        #bottomframe .profile img {
+            width: 200px;
+            height: 200px;
+            margin: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        #bottomframe .profile img:hover {
+            transform: scale(1.1);
+        }
+        
+        #bottomframe .profile .name {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="topframe">
+        <h1>Main Page</h1>
+    </div>
+    <div id="bottomframe">
+        <div class="profile">
+            <div>
+                <a href="facultylogin.php">
+                    <img src="faculty.png" alt="Faculty Profile">
+                </a>
+                <div class="name">Faculty Profile</div>
+            </div>
+            <div>
+                <a href="adminlogin.html">
+                    <img src="admin.png" alt="Admin Profile">
+                </a>
+                <div class="name">Admin Profile</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
