@@ -62,7 +62,7 @@
         $servername = "sqlserver43.mysql.database.azure.com";
         $username = "nirupamashree";
         $password = "laks@2003";
-        $database = "user1_db";
+        $dbname = "user1_db";
 
         $conn = new mysqli($servername, $username, $password, $dbname);
         if ($conn->connect_error) {
