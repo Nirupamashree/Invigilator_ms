@@ -106,7 +106,7 @@
     $servername = "sqlserver43.mysql.database.azure.com";
     $username = "nirupamashree";
     $password = "laks@2003";
-    $database = "user1_db";
+    $dbname = "user1_db";
 
     // Check if the form is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
