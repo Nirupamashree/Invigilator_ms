@@ -1,10 +1,9 @@
 <?php
 // Connect to the database
-$servername = "localhost"; // Replace with your database server name
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-$dbname = "user1_db"; // Replace with your database name
-
+$servername = "sqlserver43.mysql.database.azure.com";
+$username = "nirupamashree";
+$password = "laks@2003";
+$database = "user1_db";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
