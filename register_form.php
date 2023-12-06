@@ -112,10 +112,11 @@
 
 <?php
 // Database connection
-$host = 'localhost';
+
+$host = 'sqlserver43.mysql.database.azure.com';
 $db = 'user1_db';
-$user = 'root';
-$password = '';
+$user = 'nirupamashree';
+$password = 'laks@2003';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
