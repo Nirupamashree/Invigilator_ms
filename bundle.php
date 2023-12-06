@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $noOfPapersCollected = $_POST['noOfPapersCollected'];
 
     // Connect to the database
-    $servername = "localhost"; // Replace with your database server name
-    $username = "root"; // Replace with your database username
-    $password = ""; // Replace with your database password
+    $servername = "sqlserver43.mysql.database.azure.com";
+    $username = "nirupamashree";
+    $password = "laks@2003";
     $dbname = "user1_db"; // Replace with your database name
 
     $conn = new mysqli($servername, $username, $password, $dbname);
