@@ -4,7 +4,7 @@ session_start();
 // Assuming you have already established a database connection
 $servername = "sqlserver43.mysql.database.azure.com";
 $username = "nirupamashree";
-$password = "laks@2003";
+$password = "password@123";
 $dbname = "user1_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
