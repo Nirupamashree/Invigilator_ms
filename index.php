@@ -122,7 +122,7 @@
                     <div class="swiper-wrapper">
                         <!--==================== DISCOVER 1 ====================-->
                         <div class="discover__card swiper-slide">
-                            <img src="image4.jpeg" alt="" class="discover__img">
+                            <img src="image4.jpg" alt="" class="discover__img">
                             <div class="discover__data">
                                 <h2 class="discover__title"></h2>
                                 <span class="discover__description"></span>
@@ -140,7 +140,7 @@
 
                         <!--==================== DISCOVER 3 ====================-->
                         <div class="discover__card swiper-slide">
-                            <img src="image6.jpeg" alt="" class="discover__img">
+                            <img src="image6.jpg" alt="" class="discover__img">
                             <div class="discover__data">
                                 <h2 class="discover__title">Functionality</h2>
                                 <span class="discover__description"></span>
