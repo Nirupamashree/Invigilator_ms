@@ -100,7 +100,7 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["allocate"])) {
         $servername = "sqlserver43.mysql.database.azure.com";
         $username = "nirupamashree";
-        $password = "laks@2003";
+        $password = "password@123";
         $dbname = "user1_db";
 
         // Create connection
