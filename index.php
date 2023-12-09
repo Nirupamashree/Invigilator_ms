@@ -16,22 +16,6 @@
         <!--=============== CSS ===============-->
         <link rel="stylesheet" href="assets/css/styles.css">
 
-        <?php
-    // Database connection details
-    $servername = "sqlserver43.mysql.database.azure.com";
-    $username = "nirupamashree";
-    $password = "password@123";
-    $dbname = "user1_db";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    ?>
-
         <title></title>
     </head>
     <body>
