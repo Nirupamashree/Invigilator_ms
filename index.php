@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="shortcut icon" href="assets/img/favicon.png" type="image/png">
+        <link rel="shortcut icon" href="favicon.png" type="image/png">
 
         <!--=============== REMIXICONS ===============-->
         <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -66,7 +66,7 @@
         <main class="main">
             <!--==================== HOME ====================-->
             <section class="home" id="home">
-                <img src="assets/img/amrita_univerty.jpg" alt="" class="home__img">
+                <img src="amrita_univerty.jpg" alt="" class="home__img">
 
                 <div class="home__container container grid">
                     <div class="home__data">
@@ -104,11 +104,11 @@
 
                     <div class="about__img">
                         <div class="about__img-overlay">
-                            <img src="assets/img/image1.png" alt="" class="about__img-one">
+                            <img src="image1.png" alt="" class="about__img-one">
                         </div>
 
                         <div class="about__img-overlay">
-                            <img src="assets/img/image2.png" alt="" class="about__img-two">
+                            <img src="image2.png" alt="" class="about__img-two">
                         </div>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                     <div class="swiper-wrapper">
                         <!--==================== DISCOVER 1 ====================-->
                         <div class="discover__card swiper-slide">
-                            <img src="assets/img/image4.jpeg" alt="" class="discover__img">
+                            <img src="image4.jpeg" alt="" class="discover__img">
                             <div class="discover__data">
                                 <h2 class="discover__title"></h2>
                                 <span class="discover__description"></span>
@@ -131,7 +131,7 @@
 
                         <!--==================== DISCOVER 2 ====================-->
                         <div class="discover__card swiper-slide">
-                            <img src="assets/img/image5.png" alt="" class="discover__img">
+                            <img src="image5.png" alt="" class="discover__img">
                             <div class="discover__data">
                                 <h2 class="discover__title">Personalization</h2>
                                 <span class="discover__description"></span>
@@ -140,7 +140,7 @@
 
                         <!--==================== DISCOVER 3 ====================-->
                         <div class="discover__card swiper-slide">
-                            <img src="assets/img/image6.jpeg" alt="" class="discover__img">
+                            <img src="image6.jpeg" alt="" class="discover__img">
                             <div class="discover__data">
                                 <h2 class="discover__title">Functionality</h2>
                                 <span class="discover__description"></span>
@@ -171,7 +171,7 @@
 
                     <div class="experience__img grid">
                         <div class="experience__overlay">
-                            <img src="assets/img/img5.jpg" alt="" class="experience__img-one">
+                            <img src="img5.jpg" alt="" class="experience__img-one">
                         </div>
                         
                         <div class="experience__overlay">
@@ -183,7 +183,7 @@
                             <br><br>
                             <br>
                             <br>
-                            <img src="assets/img/image3.jpg" alt="" class="experience__img-two">
+                            <img src="image3.jpg" alt="" class="experience__img-two">
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
 
                     <div class="video__content">
                         <video id="video-file">
-                            <source src="assets/video/amrita1-1.mp4" type="video/mp4">
+                            <source src="amrita1-1.mp4" type="video/mp4">
                         </video>
 
                         <button class="button button--flex video__button" id="video-button">
@@ -252,12 +252,12 @@
         </a>
 
         <!--=============== SCROLL REVEAL===============-->
-        <script src="assets/js/scrollreveal.min.js"></script>
+        <script src="scrollreveal.min.js"></script>
         
         <!--=============== SWIPER JS ===============-->
-        <script src="assets/js/swiper-bundle.min.js"></script>
+        <script src="swiper-bundle.min.js"></script>
 
         <!--=============== MAIN JS ===============-->
-        <script src="assets/js/main.js"></script>
+        <script src="main.js"></script>
     </body>
 </html>
