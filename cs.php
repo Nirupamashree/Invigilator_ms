@@ -3,9 +3,9 @@ $message = ''; // Initialize the message variable
 $messageClass = ''; // Initialize the message class variable
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["allocate"])) {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
+    $servername = "sqlserver43.mysql.database.azure.com";
+    $username = "nirupamashree";
+    $password = "password@123";
     $dbname = "user1_db";
 
     // Create connection
