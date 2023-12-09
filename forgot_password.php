@@ -3,7 +3,7 @@ session_start();
 // Assuming you have a connection to the MySQL database
 $servername = "sqlserver43.mysql.database.azure.com";
 $username = "nirupamashree";
-$password = "laks@2003";
+$password = "password@123";
 $dbname = "user1_db";
 
 // Create a new password for the database connection
