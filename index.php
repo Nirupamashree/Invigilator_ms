@@ -116,35 +116,8 @@
             
             <!--==================== DISCOVER ====================-->
             <section class="discover section" id="discover">
-                <h2 class="section__title">Services provided by<br>IMS</h2>
-                
-                <div class="discover__container container swiper-container">
-                    <div class="swiper-wrapper">
-                        <!--==================== DISCOVER 1 ====================-->
-                        <div class="discover__card swiper-slide">
-                            <img src="image4.jpeg" alt="" class="discover__card-one">
-                            <div class="discover__data">
-                                <h2 class="discover__title"></h2>
-                                <span class="discover__description"></span>
-                            </div>
-                        </div>
-
-                        <!--==================== DISCOVER 2 ====================-->
-                        <div class="discover__card swiper-slide">
-                            <img src="image5.png" alt="" class="discover__card-two">
-                        </div>
-
-                        <!--==================== DISCOVER 3 ====================-->
-                        <div class="discover__card swiper-slide">
-                            <img src="image6.jpeg" alt="" class="discover__card-three">
-                            <div class="discover__data">
-                                <h2 class="discover__title">Functionality</h2>
-                                <span class="discover__description"></span>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    </section>
+                <h2 class="section__title">Services provided by<br>IMS</h2>    
+            </section>
             <!--==================== EXPERIENCE ====================-->
             <section class="experience section">
                 <div class="experience__container container grid">
