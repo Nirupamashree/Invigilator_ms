@@ -116,7 +116,7 @@
 $host = 'sqlserver43.mysql.database.azure.com';
 $db = 'user1_db';
 $user = 'nirupamashree';
-$password = 'laks@2003';
+$password = 'password@123';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
