@@ -112,7 +112,6 @@
 
 <?php
 // Database connection
-
 $host = 'sqlserver43.mysql.database.azure.com';
 $db = 'user1_db';
 $user = 'nirupamashree';
@@ -184,23 +183,6 @@ if (isset($_POST['submit'])) {
         $stmt->execute([$name, $email, $password]);
 
         $successMsg = 'Registration Successful!';
-
-        if (isset($successMsg)) {
-            // Generate CSV content
-            $csvContent = "Name,Email,Password\n";
-            $csvContent .= "$name,$email,$password\n";
-
-            // Set the CSV file name
-            $csvFileName = 'user_data.csv';
-
-            // Set the appropriate headers for file download
-            header('Content-Type: application/csv');
-            header('Content-Disposition: attachment; filename="' . $csvFileName . '"');
-
-            // Output the CSV content to the browser
-            echo $csvContent;
-            exit(); // Stop further execution
-        }
     }
 }
 ?>
