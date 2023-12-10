@@ -107,7 +107,6 @@
             margin-bottom: 10px;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
         function showAlert(message) {
             alert(message);
@@ -115,55 +114,19 @@
 
         function showTable() {
             var facultyName = document.getElementById('faculty_name').value;
-
-            if (facultyName.trim() === '') {
-                showAlert("Please enter a valid faculty name.");
-                return;
-            }
-
-            // AJAX request to fetch table data
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        var result = JSON.parse(xhr.responseText);
-                        if (result.error) {
-                            showAlert(result.error);
-                        } else {
-                            generatePDF(result.data, facultyName);
-                        }
-                    } else {
-                        showAlert("Error fetching data from the server.");
-                    }
-                }
-            };
-            xhr.open('GET', 'fetch-table-data.php?faculty_name=' + encodeURIComponent(facultyName), true);
-            xhr.send();
-        }
-
-        function generatePDF(data, facultyName) {
-            var pdf = new jsPDF();
-            pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
-
-            var columns = Object.keys(data[0]);
-            var rows = data.map(obj => columns.map(key => obj[key]));
-
-            pdf.autoTable({
-                head: [columns],
-                body: rows
-            });
-
-            pdf.save(facultyName + '_timetable.pdf');
+            window.location.href = '?faculty_name=' + encodeURIComponent(facultyName);
         }
     </script>
 </head>
 <body>
     <?php
+    // Database connection
     $host = 'sqlserver43.mysql.database.azure.com';
     $db = 'user1_db';
     $user = 'nirupamashree';
     $password = 'password@123';
     $charset = 'utf8mb4';
+
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -199,7 +162,7 @@
         <div class="form-container">
             <label for="faculty_name">Faculty Name:</label>
             <input type="text" id="faculty_name" name="faculty_name" required value="<?php echo $facultyName; ?>">
-            <input type="button" onclick="showTable()" value="Show Table and Download PDF">
+            <input type="button" onclick="showTable()" value="Show Table">
             <br>
             <br>
         </div>
