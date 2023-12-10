@@ -107,38 +107,40 @@
             margin-bottom: 10px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
-        function showAlert(message) {
-            alert(message);
+    function showAlert(message) {
+        alert(message);
+    }
+
+    function showTable() {
+        var facultyName = document.getElementById('faculty_name').value;
+
+        if (facultyName.trim() === '') {
+            showAlert("Please enter a valid faculty name.");
+            return;
         }
 
-        function showTable() {
-            var facultyName = document.getElementById('faculty_name').value;
+        // Create a new jsPDF instance
+        var pdf = new jsPDF();
 
-            if (facultyName.trim() === '') {
-                showAlert("Please enter a valid faculty name.");
-                return;
-            }
+        // Set the header
+        pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
 
-            // Create a new jsPDF instance
-            var pdf = new jsPDF();
+        // Get the table element
+        var table = document.querySelector('.table-container table');
 
-            // Set the header
-            pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
+        // Convert the table to a data URL
+        var dataURL = table.toDataURL();
 
-            // Get the table element
-            var table = document.querySelector('.table-container table');
+        // Add the image of the table to the PDF
+        pdf.addImage(dataURL, 'JPEG', 10, 20);
 
-            // Convert the table to a data URL
-            var dataURL = table.toDataURL();
+        // Save the PDF
+        pdf.save(facultyName + '_timetable.pdf');
+    }
+</script>
 
-            // Add the image of the table to the PDF
-            pdf.addImage(dataURL, 'JPEG', 10, 20);
-
-            // Save the PDF
-            pdf.save(facultyName + '_timetable.pdf');
-        }
-    </script>
 </head>
 <body>
     <?php
