@@ -216,76 +216,22 @@
             <br>
         </div>
 
-        <?php if ($showTable): ?>
+       <?php if ($showTable): ?>
         <div class="table-container">
             <h2>Faculty: <?php echo $facultyName; ?></h2>
             <table>
                 <tr>
-                                            <th>day</th>
-                                            <th>slot1</th>
-                                            <th>slot2</th>
-                                            <th>slot3</th>
-                                            <th>slot4</th>
-                                            <th>slot5</th>
-                                            <th>slot6</th>
-                                            <th>slot7</th>
-                                            <th>slot8</th>
-                                    </tr>
-                                    <tr>
-                                                    <td>Monday</td>
-                                                    <td></td>
-                                                    <td>19CSE311</td>
-                                                    <td></td>
-                                                    <td>19CSE332</td>
-                                                    <td></td>
-                                                    <td>19CSE313</td>
-                                                    <td>19CSE313</td>
-                                                    <td></td>
-                                            </tr>
-                                    <tr>
-                                                    <td>Tuesday</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>19CSE311</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                            </tr>
-                                    <tr>
-                                                    <td>Wednesday</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>19CSE102</td>
-                                                    <td>19CSE102</td>
-                                                    <td></td>
-                                                    <td>19CSE332</td>
-                                                    <td></td>
-                                            </tr>
-                                    <tr>
-                                                    <td>Thursday</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>19CSE383</td>
-                                                    <td>19CSE383</td>
-                                                    <td></td>
-                                                    <td>19CSE213</td>
-                                                    <td>19CSE213</td>
-                                                    <td></td>
-                                            </tr>
-                                    <tr>
-                                                    <td>Friday</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>19CSE332</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                            </tr>
+                    <?php foreach ($result[0] as $column => $value): ?>
+                        <th><?php echo $column; ?></th>
+                    <?php endforeach; ?>
+                </tr>
+                <?php foreach ($result as $row): ?>
+                    <tr>
+                        <?php foreach ($row as $value): ?>
+                            <td><?php echo $value; ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
             </table>
         </div>
         <?php endif; ?>
