@@ -120,50 +120,13 @@
 </head>
 <body>
     <?php
-    // Include the Azure Storage Blob SDK
-    require_once 'vendor/autoload.php';
-
-    use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-    use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
-    use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
-
-    // Azure Storage account credentials
-    $connectionString = 'DefaultEndpointsProtocol=https;AccountName=storage123443;AccountKey=vKRDkRv/PG3pEXPK5i0g6EV1g08MBCJaxVUu6eN89IUH2mMymbEha55QT1RiPBuRGF+q7+F1vP/s+AStI5iMhg==;EndpointSuffix=core.windows.net';
-    $containerName = 'nirupama43';
-    $blobClient = BlobRestProxy::createBlobService($connectionString);
-
-    // Check if the form is submitted
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $facultyName = $_POST['faculty_name'] ?? '';
-
-        // Upload tt.jpg to Azure Blob Storage
-        $imagePath = $_FILES['file']['tmp_name'];
-
-        try {
-            // Upload the image to Azure Blob Storage
-            $content = file_get_contents($imagePath);
-            $blobName = 'tt.jpg';
-            $blobClient->createBlockBlob(
-                $containerName,
-                $blobName,
-                $content,
-                new CreateBlockBlobOptions()
-            );
-
-            echo "Image uploaded to Azure Blob Storage successfully!";
-        } catch (ServiceException $e) {
-            $code = $e->getCode();
-            $error_message = $e->getMessage();
-            echo "Error uploading image: $error_message";
-        }
-    }
-
     // Database connection
     $host = 'sqlserver43.mysql.database.azure.com';
     $db = 'user1_db';
     $user = 'nirupamashree';
     $password = 'password@123';
     $charset = 'utf8mb4';
+
 
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
     $options = [
@@ -198,28 +161,16 @@
     <div class="container">
         <h2>FACULTY TIMETABLE</h2>
         <h3>Faculty time-table</h3>
-        <a href="tt.jpg" download>
+         <a href="tt.jpg" download>
             <img src="tt.jpg" alt="Timetable Image" style="max-width: 100%; height: auto; margin-top: 20px;">
         </a>
         <br>
         <div class="form-container">
-            <!-- Form to show the table -->
-            <form method="get">
-                <label for="faculty_name_show">Faculty Name:</label>
-                <input type="text" id="faculty_name_show" name="faculty_name" required value="<?php echo $facultyName; ?>">
-                <input type="submit" value="Show Table">
-            </form>
-        </div>
-
-        <div class="form-container">
-            <!-- Form to upload the image -->
-            <form method="post" enctype="multipart/form-data">
-                <label for="faculty_name_upload">Faculty Name:</label>
-                <input type="text" id="faculty_name_upload" name="faculty_name" required value="<?php echo $facultyName; ?>">
-                <label for="file">Upload tt.jpg to Azure Blob Storage:</label>
-                <input type="file" name="file" id="file" accept=".jpg">
-                <input type="submit" value="Upload Image">
-            </form>
+            <label for="faculty_name">Faculty Name:</label>
+            <input type="text" id="faculty_name" name="faculty_name" required value="<?php echo $facultyName; ?>">
+            <input type="button" onclick="showTable()" value="Show Table">
+            <br>
+            <br>
         </div>
 
         <?php if ($showTable): ?>
