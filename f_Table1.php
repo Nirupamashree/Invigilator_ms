@@ -127,8 +127,8 @@
     use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 
 // Azure Storage account credentials
-    $connectionString = 'DefaultEndpointsProtocol=https;AccountName=csg10032001200f3370;AccountKey=zOvIbSi75pb+qHjYtBtUMjySfK9dLYUxrUUcGHnIJibsAb2f5hD62Yfl5QPNz11DeREX4p8ZBA1Q+AStp4jbFQ==;EndpointSuffix=core.windows.net';
-    $containerName = 'container1002';
+    $connectionString = 'DefaultEndpointsProtocol=https;AccountName=storage123443;AccountKey=vKRDkRv/PG3pEXPK5i0g6EV1g08MBCJaxVUu6eN89IUH2mMymbEha55QT1RiPBuRGF+q7+F1vP/s+AStI5iMhg==;EndpointSuffix=core.windows.net';
+    $containerName = 'nirupama43';
     $blobClient = BlobRestProxy::createBlobService($connectionString);
 
 // Check if the form is submitted
