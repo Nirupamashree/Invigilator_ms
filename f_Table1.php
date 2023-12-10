@@ -161,7 +161,9 @@
     <div class="container">
         <h2>FACULTY TIMETABLE</h2>
         <h1>Faculty time-table</h1>
-        <img src="tt.jpg" alt="Timetable Image" style="max-width: 100%; height: auto; margin-top: 20px;">
+         <a href="tt.jpg" download>
+            <img src="tt.jpg" alt="Timetable Image" style="max-width: 100%; height: auto; margin-top: 20px;">
+        </a>
         <div class="form-container">
             <label for="faculty_name">Faculty Name:</label>
             <input type="text" id="faculty_name" name="faculty_name" required value="<?php echo $facultyName; ?>">
