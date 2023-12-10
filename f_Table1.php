@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Faculty Table Viewer</title>
     <style>
@@ -109,80 +109,98 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
-    function showAlert(message) {
-        alert(message);
-    }
-
-    function showTable() {
-        var facultyName = document.getElementById('faculty_name').value;
-
-        if (facultyName.trim() === '') {
-            showAlert("Please enter a valid faculty name.");
-            return;
+        function showAlert(message) {
+            alert(message);
         }
 
-        // Create a new jsPDF instance
-        var pdf = new jsPDF();
+        function showTable() {
+            var facultyName = document.getElementById('faculty_name').value;
 
-        // Set the header
-        pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
+            if (facultyName.trim() === '') {
+                showAlert("Please enter a valid faculty name.");
+                return;
+            }
 
-        // Get the table element
-        var table = document.querySelector('.table-container table');
+            // Create a new jsPDF instance
+            var pdf = new jsPDF();
 
-        // Convert the table to a data URL
-        var dataURL = table.toDataURL();
+            // Set the header
+            pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
 
-        // Add the image of the table to the PDF
-        pdf.addImage(dataURL, 'JPEG', 10, 20);
+            // Get the table element
+            var table = document.querySelector('.table-container table');
 
-        // Save the PDF
-        pdf.save(facultyName + '_timetable.pdf');
-    }
-</script>
+            // Convert the table to a data URL
+            var dataURL = tableToDataURL(table);
 
+            // Add the image of the table to the PDF
+            pdf.addImage(dataURL, 'JPEG', 10, 20);
+
+            // Save the PDF
+            pdf.save(facultyName + '_timetable.pdf');
+        }
+
+        // Function to convert a table to data URL
+        function tableToDataURL(table) {
+            var ctx = document.createElement('canvas').getContext('2d');
+            var dataURL;
+
+            // Draw the table on a canvas
+            var tableWidth = table.offsetWidth;
+            var tableHeight = table.offsetHeight;
+            ctx.canvas.width = tableWidth;
+            ctx.canvas.height = tableHeight;
+            var img = new Image();
+
+            // Create a data URL from the canvas
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, tableWidth, tableHeight);
+                dataURL = ctx.canvas.toDataURL('image/jpeg');
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(new XMLSerializer().serializeToString(table));
+
+            return dataURL;
+        }
+    </script>
 </head>
 <body>
-<?php
-// Database connection
-$host = 'sqlserver43.mysql.database.azure.com';
-$db = 'user1_db';
-$user = 'nirupamashree';
-$password = 'password@123';
-$charset = 'utf8mb4';
+    <?php
+    $host = 'sqlserver43.mysql.database.azure.com';
+    $db = 'user1_db';
+    $user = 'nirupamashree';
+    $password = 'password@123';
+    $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
 
-try {
-    $pdo = new PDO($dsn, $user, $password, $options);
-} catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
-}
-
-$showTable = false;
-$facultyName = $_GET['faculty_name'] ?? '';
-
-if (!empty($facultyName)) {
-    // Wrap the query execution in a try-catch block to handle potential errors
     try {
-        $stmt = $pdo->prepare("SELECT * FROM $facultyName");
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $showTable = true;
+        $pdo = new PDO($dsn, $user, $password, $options);
     } catch (PDOException $e) {
-        echo '<script>showAlert("Error fetching data: ' . $e->getMessage() . '");</script>';
+        die("Error: " . $e->getMessage());
     }
-}
 
-if (!$showTable && !empty($facultyName)) {
-    echo '<script>showAlert("Faculty TimeTable does not exist.");</script>';
-}
-?>
+    $showTable = false;
+    $facultyName = $_GET['faculty_name'] ?? '';
+
+    if (!empty($facultyName)) {
+        if ($pdo->query("SHOW TABLES LIKE '$facultyName'")->rowCount() > 0) {
+            $stmt = $pdo->prepare("SELECT * FROM $facultyName");
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $showTable = true;
+        }
+    }
+
+    if (!$showTable && !empty($facultyName)) {
+        echo '<script>showAlert("Faculty TimeTable does not exist.");</script>';
+    }
+    ?>
+
     <div class="container">
         <h2>FACULTY TIMETABLE</h2>
         <div class="form-container">
@@ -198,17 +216,71 @@ if (!$showTable && !empty($facultyName)) {
             <h2>Faculty: <?php echo $facultyName; ?></h2>
             <table>
                 <tr>
-                    <?php foreach ($result[0] as $column => $value): ?>
-                        <th><?php echo $column; ?></th>
-                    <?php endforeach; ?>
-                </tr>
-                <?php foreach ($result as $row): ?>
-                    <tr>
-                        <?php foreach ($row as $value): ?>
-                            <td><?php echo $value; ?></td>
-                        <?php endforeach; ?>
-                    </tr>
-                <?php endforeach; ?>
+                                            <th>day</th>
+                                            <th>slot1</th>
+                                            <th>slot2</th>
+                                            <th>slot3</th>
+                                            <th>slot4</th>
+                                            <th>slot5</th>
+                                            <th>slot6</th>
+                                            <th>slot7</th>
+                                            <th>slot8</th>
+                                    </tr>
+                                    <tr>
+                                                    <td>Monday</td>
+                                                    <td></td>
+                                                    <td>19CSE311</td>
+                                                    <td></td>
+                                                    <td>19CSE332</td>
+                                                    <td></td>
+                                                    <td>19CSE313</td>
+                                                    <td>19CSE313</td>
+                                                    <td></td>
+                                            </tr>
+                                    <tr>
+                                                    <td>Tuesday</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>19CSE311</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                            </tr>
+                                    <tr>
+                                                    <td>Wednesday</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>19CSE102</td>
+                                                    <td>19CSE102</td>
+                                                    <td></td>
+                                                    <td>19CSE332</td>
+                                                    <td></td>
+                                            </tr>
+                                    <tr>
+                                                    <td>Thursday</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>19CSE383</td>
+                                                    <td>19CSE383</td>
+                                                    <td></td>
+                                                    <td>19CSE213</td>
+                                                    <td>19CSE213</td>
+                                                    <td></td>
+                                            </tr>
+                                    <tr>
+                                                    <td>Friday</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>19CSE332</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                            </tr>
             </table>
         </div>
         <?php endif; ?>
