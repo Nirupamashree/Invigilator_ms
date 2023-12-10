@@ -58,39 +58,39 @@
 <body>
     <?php
     $host = 'sqlserver43.mysql.database.azure.com';
-$db = 'user1_db';
-$user = 'nirupamashree';
-$password = 'password@123';
-$charset = 'utf8mb4';
+    $db = 'user1_db';
+    $user = 'nirupamashree';
+    $password = 'password@123';
+    $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
 
-try {
-    $pdo = new PDO($dsn, $user, $password, $options);
-} catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
-}
+    try {
+        $pdo = new PDO($dsn, $user, $password, $options);
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
+    }
 
-$facultyName = $_GET['faculty_name'] ?? '';
-$response = [];
+    $facultyName = $_GET['faculty_name'] ?? '';
+    $response = [];
 
-if (!empty($facultyName)) {
-    $stmt = $pdo->prepare("SELECT * FROM $facultyName");
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (!empty($facultyName)) {
+        $stmt = $pdo->prepare("SELECT * FROM $facultyName");
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $response['data'] = $result;
-} else {
-    $response['error'] = "Invalid faculty name.";
-}
+        $response['data'] = $result;
+    } else {
+        $response['error'] = "Invalid faculty name.";
+    }
 
-header('Content-Type: application/json');
-echo json_encode($response);
+    header('Content-Type: application/json');
+    echo json_encode($response);
     ?>
 
     <div class="container">
@@ -98,7 +98,7 @@ echo json_encode($response);
         <div class="form-container">
             <label for="faculty_name">Faculty Name:</label>
             <input type="text" id="faculty_name" name="faculty_name" required value="<?php echo $facultyName; ?>">
-            <input type="button" onclick="showTable()" value="Show Table and Download PDF">
+            <input type="button" onclick="showTable()" value="Show Table">
             <br>
             <br>
         </div>
