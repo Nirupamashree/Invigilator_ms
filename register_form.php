@@ -106,6 +106,12 @@
                 passwordVisibility.textContent = "Show Password";
             }
         }
+
+        function downloadPDF() {
+            // Trigger download link click
+            var downloadLink = document.getElementById("downloadLink");
+            downloadLink.click();
+        }
     </script>
 </head>
 
