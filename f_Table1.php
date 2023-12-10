@@ -3,7 +3,109 @@
 <head>
     <title>Faculty Table Viewer</title>
     <style>
-        /* Your existing CSS styles remain unchanged */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            /*text-transform: uppercase;*/
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 80%;
+            background-color: #fff;
+            margin-top: 30px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Modified shadow */
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .form-container {
+            float: left;
+            width: 300px;
+            margin-right: 20px;
+        }
+
+        .form-container label {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-container input[type="text"] {
+            width: 100%;
+            height: 30px;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        .form-container input[type="button"] {
+            width: 100%;
+            height: 40px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .form-container input[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        .table-container {
+            margin-top: 30px;
+        }
+
+        .table-container table {
+            width: 100%;
+        }
+
+        .form-container input[type="button"] {
+            margin-bottom: 10px;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
@@ -62,7 +164,6 @@
     $user = 'nirupamashree';
     $password = 'password@123';
     $charset = 'utf8mb4';
-
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -76,21 +177,21 @@
         die("Error: " . $e->getMessage());
     }
 
+    $showTable = false;
     $facultyName = $_GET['faculty_name'] ?? '';
-    $response = [];
 
     if (!empty($facultyName)) {
-        $stmt = $pdo->prepare("SELECT * FROM $facultyName");
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $response['data'] = $result;
-    } else {
-        $response['error'] = "Invalid faculty name.";
+        if ($pdo->query("SHOW TABLES LIKE '$facultyName'")->rowCount() > 0) {
+            $stmt = $pdo->prepare("SELECT * FROM $facultyName");
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $showTable = true;
+        }
     }
 
-    header('Content-Type: application/json');
-    echo json_encode($response);
+    if (!$showTable && !empty($facultyName)) {
+        echo '<script>showAlert("Faculty TimeTable does not exist.");</script>';
+    }
     ?>
 
     <div class="container">
@@ -98,7 +199,7 @@
         <div class="form-container">
             <label for="faculty_name">Faculty Name:</label>
             <input type="text" id="faculty_name" name="faculty_name" required value="<?php echo $facultyName; ?>">
-            <input type="button" onclick="showTable()" value="Show Table">
+            <input type="button" onclick="showTable()" value="Show Table and Download PDF">
             <br>
             <br>
         </div>
