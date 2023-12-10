@@ -16,8 +16,31 @@ $facultyName = $_SESSION['username'];
 $successMessage = '';
 $errorMessage = '';
 
-// Check if the form is submitted
+// Include TCPDF library
+require_once('tcpdf/tcpdf.php');
+
+// Check if the form is submitted and download action is requested
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Connect to the database
+    $host = 'sqlserver43.mysql.database.azure.com';
+    $db = 'user1_db';
+    $user = 'nirupamashree';
+    $password = 'password@123';
+    $charset = 'utf8mb4';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+
+    try {
+        $pdo = new PDO($dsn, $user, $password, $options);
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
+    }
+
     // Get the remaining form data
     $date = $_POST['date'];
     $day = date('l', strtotime($date)); // Automatically fill the day based on the selected date
@@ -28,89 +51,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $noOfAbsentees = $_POST['noOfAbsentees'];
     $noOfPapersCollected = $_POST['noOfPapersCollected'];
 
-    // Connect to the database
-    $servername = "sqlserver43.mysql.database.azure.com";
-    $username = "nirupamashree";
-    $password = "password@123";
-    $dbname = "user1_db"; // Replace with your database name
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
     // Check if the record exists in the 'allocate' table
     $sql = "SELECT * FROM allocate WHERE facultyName = '$facultyName' AND date = '$date' AND day = '$day' AND slot = '$slot'";
-    $result = $conn->query($sql);
+    $result = $pdo->query($sql);
 
-    if ($result->num_rows > 0) {
+    if ($result->rowCount() > 0) {
         // The record exists, insert the form data into the 'bundle' table
         $insertSql = "INSERT INTO bundle (facultyName, date, day, slot, venue, classroom, noOfStudents, noOfAbsentees, noOfPapersCollected) VALUES ('$facultyName', '$date', '$day', '$slot', '$venue', '$classroom', $noOfStudents, $noOfAbsentees, $noOfPapersCollected)";
-        if ($conn->query($insertSql) === TRUE) {
+        if ($pdo->exec($insertSql) !== false) {
             $successMessage = "Form submitted successfully.";
 
-            // Generate and download PDF
-            generateAndDownloadPDF($facultyName, $date, $day, $slot, $venue, $classroom, $noOfStudents, $noOfAbsentees, $noOfPapersCollected);
+            // Create a PDF document using TCPDF
+            $pdf = new TCPDF();
+            $pdf->SetAutoPageBreak(true, 10);
+            $pdf->AddPage();
+
+            // Output your form data to the PDF
+            $pdf->SetFont('helvetica', '', 12);
+            $pdf->Write(10, 'Bundle Submission Form');
+            $pdf->Ln();
+            $pdf->Write(10, 'Faculty Name: ' . $facultyName);
+            $pdf->Ln();
+            $pdf->Write(10, 'Date: ' . $date);
+            $pdf->Ln();
+            $pdf->Write(10, 'Day: ' . $day);
+            $pdf->Ln();
+            $pdf->Write(10, 'Slot: ' . $slot);
+            $pdf->Ln();
+            $pdf->Write(10, 'Venue: ' . $venue);
+            $pdf->Ln();
+            $pdf->Write(10, 'Classroom: ' . $classroom);
+            $pdf->Ln();
+            $pdf->Write(10, 'No. of Students: ' . $noOfStudents);
+            $pdf->Ln();
+            $pdf->Write(10, 'No. of Absentees: ' . $noOfAbsentees);
+            $pdf->Ln();
+            $pdf->Write(10, 'No. of Papers Collected: ' . $noOfPapersCollected);
+
+            // Output PDF for download
+            $pdf->Output('Bundle_Submission.pdf', 'D');
+            exit();
         } else {
-            $errorMessage = "Error: " . $insertSql . "<br>" . $conn->error;
+            $errorMessage = "Error: " . $insertSql . "<br>" . $pdo->errorInfo()[2];
         }
     } else {
         $errorMessage = "Record does not exist in the 'allocate' table.";
     }
-
-    // Close the database connection
-    $conn->close();
-}
-
-// Function to generate and download PDF
-function generateAndDownloadPDF($facultyName, $date, $day, $slot, $venue, $classroom, $noOfStudents, $noOfAbsentees, $noOfPapersCollected) {
-    require('fpdf/fpdf.php'); // Include the FPDF library
-
-    // Create a new PDF instance
-    $pdf = new FPDF();
-    $pdf->AddPage();
-
-    // Set font
-    $pdf->SetFont('Arial', 'B', 16);
-
-    // Add content to the PDF
-    $pdf->Cell(40, 10, 'Faculty Name: ' . $facultyName);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'Date: ' . $date);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'Day: ' . $day);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'Slot: ' . $slot);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'Venue: ' . $venue);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'Classroom: ' . $classroom);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'No. of Students: ' . $noOfStudents);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'No. of Absentees: ' . $noOfAbsentees);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'No. of Papers Collected: ' . $noOfPapersCollected);
-
-    // Save the PDF to a file (you can also output it directly to the browser)
-    $pdfFileName = 'bundle_' . $facultyName . '_' . $date . '.pdf';
-    $pdf->Output('F', $pdfFileName);
-
-    // Force download
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . basename($pdfFileName));
-    header('Content-Transfer-Encoding: binary');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($pdfFileName));
-    ob_clean();
-    flush();
-    readfile($pdfFileName);
-    exit;
 }
 ?>
 
