@@ -50,6 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $insertSql = "INSERT INTO bundle (facultyName, date, day, slot, venue, classroom, noOfStudents, noOfAbsentees, noOfPapersCollected) VALUES ('$facultyName', '$date', '$day', '$slot', '$venue', '$classroom', $noOfStudents, $noOfAbsentees, $noOfPapersCollected)";
         if ($conn->query($insertSql) === TRUE) {
             $successMessage = "Form submitted successfully.";
+
+            // Generate and download PDF
+            generateAndDownloadPDF($facultyName, $date, $day, $slot, $venue, $classroom, $noOfStudents, $noOfAbsentees, $noOfPapersCollected);
         } else {
             $errorMessage = "Error: " . $insertSql . "<br>" . $conn->error;
         }
@@ -60,8 +63,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Close the database connection
     $conn->close();
 }
+
+// Function to generate and download PDF
+function generateAndDownloadPDF($facultyName, $date, $day, $slot, $venue, $classroom, $noOfStudents, $noOfAbsentees, $noOfPapersCollected) {
+    require('fpdf/fpdf.php'); // Include the FPDF library
+
+    // Create a new PDF instance
+    $pdf = new FPDF();
+    $pdf->AddPage();
+
+    // Set font
+    $pdf->SetFont('Arial', 'B', 16);
+
+    // Add content to the PDF
+    $pdf->Cell(40, 10, 'Faculty Name: ' . $facultyName);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'Date: ' . $date);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'Day: ' . $day);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'Slot: ' . $slot);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'Venue: ' . $venue);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'Classroom: ' . $classroom);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'No. of Students: ' . $noOfStudents);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'No. of Absentees: ' . $noOfAbsentees);
+    $pdf->Ln();
+    $pdf->Cell(40, 10, 'No. of Papers Collected: ' . $noOfPapersCollected);
+
+    // Save the PDF to a file (you can also output it directly to the browser)
+    $pdfFileName = 'bundle_' . $facultyName . '_' . $date . '.pdf';
+    $pdf->Output('F', $pdfFileName);
+
+    // Force download
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . basename($pdfFileName));
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($pdfFileName));
+    ob_clean();
+    flush();
+    readfile($pdfFileName);
+    exit;
+}
 ?>
 
+<!-- Remaining HTML content unchanged -->
+ 
 <!DOCTYPE html>
 <html>
 <head>
