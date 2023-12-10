@@ -1,6 +1,5 @@
 <?php
 session_start(); // Start the session
-require_once('tcpdf/tcpdf.php');
 
 $servername = "sqlserver43.mysql.database.azure.com";
 $username = "nirupamashree";
@@ -18,33 +17,6 @@ if ($conn->connect_error) {
 // Retrieve data from the accept table
 $sql = "SELECT * FROM accept";
 $result = $conn->query($sql);
-
-$data = array(
-    array("Faculty Name(REQUESTED)", "Faculty Name(ACCEPTED)", "Date", "Day", "Slot", "Venue"),
-    array("faculty1", "faculty2", "2023-11-02", "Thursday", "slot1", "ab1"),
-    array("faculty2", "faculty1", "2023-12-01", "Friday", "slot1", "ab1")
-);
-
-// Create a PDF document using TCPDF
-$pdf = new TCPDF();
-$pdf->SetAutoPageBreak(true, 10);
-$pdf->AddPage();
-
-// Output your table data to the PDF
-$pdf->SetFont('helvetica', '', 12);
-foreach ($data as $row) {
-    $pdf->Cell(30, 10, $row[0], 1);
-    $pdf->Cell(30, 10, $row[1], 1);
-    $pdf->Cell(30, 10, $row[2], 1);
-    $pdf->Cell(30, 10, $row[3], 1);
-    $pdf->Cell(30, 10, $row[4], 1);
-    $pdf->Cell(30, 10, $row[5], 1);
-    $pdf->Ln();
-}
-
-// Output PDF for download
-$pdf->Output('Swapped_Schedule.pdf', 'D');
-exit();
 ?>
 
 <!DOCTYPE html>
