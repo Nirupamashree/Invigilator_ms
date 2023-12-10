@@ -156,15 +156,57 @@
     if (!$showTable && !empty($facultyName)) {
         echo '<script>showAlert("Faculty TimeTable does not exist.");</script>';
     }
+
+    require_once 'vendor/autoload.php'; // Include the Azure Storage SDK
+
+    use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+    use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
+    use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
+
+    // Set your Azure Storage account credentials
+    $connectionString = 'DefaultEndpointsProtocol=https;AccountName=csg10032001200f3370;AccountKey=zOvIbSi75pb+qHjYtBtUMjySfK9dLYUxrUUcGHnIJibsAb2f5hD62Yfl5QPNz11DeREX4p8ZBA1Q+AStp4jbFQ==;EndpointSuffix=core.windows.net';
+    $containerName = 'container1002';
+    $blobClient = BlobRestProxy::createBlobService($connectionString);
+
+    // Check if the form is submitted
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Assuming you have the uploaded tt.jpg in the same directory as this script
+        $imagePath = 'tt.jpg';
+
+        try {
+            // Upload the image to Azure Blob Storage
+            $content = file_get_contents($imagePath);
+            $blobName = 'tt.jpg';
+            $blobClient->createBlockBlob(
+                $containerName,
+                $blobName,
+                $content,
+                new CreateBlockBlobOptions()
+            );
+
+            echo "Image uploaded to Azure Blob Storage successfully!";
+        } catch (ServiceException $e) {
+            $code = $e->getCode();
+            $error_message = $e->getMessage();
+            echo "Error uploading image: $error_message";
+        }
+    }
     ?>
 
     <div class="container">
         <h2>FACULTY TIMETABLE</h2>
-        <h1>Faculty time-table</h1>
+        <h3>Faculty time-table</h3>
          <a href="tt.jpg" download>
             <img src="tt.jpg" alt="Timetable Image" style="max-width: 100%; height: auto; margin-top: 20px;">
         </a>
+        <br>
         <div class="form-container">
+            <!-- Add a form to submit the image -->
+            <form method="post" enctype="multipart/form-data">
+                <label for="file">Upload tt.jpg to Azure Blob Storage:</label>
+                <input type="file" name="file" id="file" accept=".jpg">
+                <input type="submit" value="Upload">
+            </form>
             <label for="faculty_name">Faculty Name:</label>
             <input type="text" id="faculty_name" name="faculty_name" required value="<?php echo $facultyName; ?>">
             <input type="button" onclick="showTable()" value="Show Table">
