@@ -1,234 +1,177 @@
+<?php
+// MySQL server configuration
+$host = 'sqlserver43.mysql.database.azure.com';
+$db = 'user1_db';
+$user = 'nirupamashree';
+$password = 'password@123';
+$charset = 'utf8mb4';
+
+// Create a connection to the MySQL server
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+session_start(); // Start the PHP session
+
+$error = ""; // Variable to store login error message
+
+if (isset($_POST['submit'])) {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $pass = $_POST['password'];
+
+    // Email validation
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format";
+    } else {
+        $query = "SELECT * FROM user_form WHERE email='$email' AND password='$pass'";
+        $result = mysqli_query($conn, $query);
+
+        if (mysqli_num_rows($result) == 1) {
+            // User found, fetch user details
+            $row = mysqli_fetch_assoc($result);
+            $userId = $row['id'];
+            $username = $row['name'];
+
+            // Store user information in session variables
+            $_SESSION['userId'] = $userId;
+            $_SESSION['email'] = $email;
+            $_SESSION['username'] = $username;
+
+            header('Location: faculty.php'); // Redirect to the desired page after successful login
+            exit();
+        } else {
+            $error = 'Incorrect email or password!';
+        }
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Faculty Table Viewer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
-        }
-
-        h2 {
-            color: #333;
-            text-align: center;
-            margin-top: 30px;
-            font-size: 24px;
-            font-weight: bold;
-            /*text-transform: uppercase;*/
-            letter-spacing: 1px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        table {
-            margin: 0 auto;
-            border-collapse: separate;
-            border-spacing: 0;
-            width: 80%;
-            background-color: #fff;
-            margin-top: 30px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Modified shadow */
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .container::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        .form-container {
-            float: left;
-            width: 300px;
-            margin-right: 20px;
-        }
-
-        .form-container label {
-            font-weight: bold;
-            color: #555;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-container input[type="text"] {
-            width: 100%;
-            height: 30px;
-            margin-bottom: 10px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-        }
-
-        .form-container input[type="button"] {
-            width: 100%;
-            height: 40px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .form-container input[type="button"]:hover {
-            background-color: #45a049;
-        }
-
-        .table-container {
-            margin-top: 30px;
-        }
-
-        .table-container table {
-            width: 100%;
-        }
-
-        .form-container input[type="button"] {
-            margin-bottom: 10px;
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script>
-        <script>
-    function showAlert(message) {
-        alert(message);
+<style>
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
 
-    function showTable() {
-        var facultyName = document.getElementById('faculty_name').value;
-
-        if (facultyName.trim() === '') {
-            showAlert("Please enter a valid faculty name.");
-            return;
-        }
-
-        // AJAX request to fetch table data
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        var result = JSON.parse(xhr.responseText);
-                        if (result.error) {
-                            showAlert(result.error);
-                        } else {
-                            generatePDF(result.data, facultyName);
-                        }
-                    } catch (error) {
-                        showAlert("Error parsing server response.");
-                    }
-                } else {
-                    showAlert("Error fetching data from the server.");
-                }
-            }
-        };
-        xhr.open('GET', 'fetch-table-data.php?faculty_name=' + encodeURIComponent(facultyName), true);
-        xhr.send();
+    .login-container {
+      
+      width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
 
-    function generatePDF(data, facultyName) {
-        var pdf = new jsPDF();
-        pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
-
-        var columns = Object.keys(data[0]);
-        var rows = data.map(obj => columns.map(key => obj[key]));
-
-        pdf.autoTable({
-            head: [columns],
-            body: rows
-        });
-
-        pdf.save(facultyName + '_timetable.pdf');
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
     }
-    </script>
-    </script>
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 95%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    input[type="submit"]:focus {
+      outline: none;
+    }
+
+    .hide-password input[type="password"] {
+      -webkit-text-security: disc;
+      -moz-text-security: disc;
+      -ms-text-security: disc;
+      text-security: disc;
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .forgot-password a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <?php
-    $host = 'sqlserver43.mysql.database.azure.com';
-    $db = 'user1_db';
-    $user = 'nirupamashree';
-    $password = 'password@123';
-    $charset = 'utf8mb4';
-    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
-
-    try {
-        $pdo = new PDO($dsn, $user, $password, $options);
-    } catch (PDOException $e) {
-        die("Error: " . $e->getMessage());
-    }
-
-    $showTable = false;
-    $facultyName = $_GET['faculty_name'] ?? '';
-
-    if (!empty($facultyName)) {
-        if ($pdo->query("SHOW TABLES LIKE '$facultyName'")->rowCount() > 0) {
-            $stmt = $pdo->prepare("SELECT * FROM $facultyName");
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $showTable = true;
-        }
-    }
-
-    if (!$showTable && !empty($facultyName)) {
-        echo '<script>showAlert("Faculty TimeTable does not exist.");</script>';
-    }
-    ?>
-
-    <div class="container">
-        <h2>FACULTY TIMETABLE</h2>
-        <div class="form-container">
-            <label for="faculty_name">Faculty Name:</label>
-            <input type="text" id="faculty_name" name="faculty_name" required value="<?php echo $facultyName; ?>">
-            <input type="button" onclick="showTable()" value="Show Table and Download PDF">
-            <br>
-            <br>
-        </div>
-
-        <?php if ($showTable): ?>
-        <div class="table-container">
-            <h2>Faculty: <?php echo $facultyName; ?></h2>
-            <table>
-                <tr>
-                    <?php foreach ($result[0] as $column => $value): ?>
-                        <th><?php echo $column; ?></th>
-                    <?php endforeach; ?>
-                </tr>
-                <?php foreach ($result as $row): ?>
-                    <tr>
-                        <?php foreach ($row as $value): ?>
-                            <td><?php echo $value; ?></td>
-                        <?php endforeach; ?>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        </div>
-        <?php endif; ?>
+  <div class="login-container">
+    <h2>FACULTY LOGIN</h2>
+    <form action="" method="POST">
+      <div class="input-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+        <label for="showPassword">Show Password</label>
+      </div>
+      <div class="input-group">
+        <input type="submit" name="submit" value="Login">
+      </div>
+      <?php if (!empty($error)): ?>
+        <p><?php echo $error; ?></p>
+      <?php endif; ?>
+    </form>
+    <div class="forgot-password">
+      <a href="forgot_password.php">Forgot Password?</a>
     </div>
+  </div>
+  <script>
+    function togglePasswordVisibility() {
+      var passwordInput = document.getElementById("password");
+      var showPasswordCheckbox = document.getElementById("showPassword");
+
+      if (showPasswordCheckbox.checked) {
+        passwordInput.type = "text";
+      } else {
+        passwordInput.type = "password";
+      }
+    }
+  </script>
 </body>
 </html>
