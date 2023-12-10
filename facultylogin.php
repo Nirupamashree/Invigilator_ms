@@ -1,10 +1,9 @@
 <?php
 // MySQL server configuration
-$host = 'sqlserver43.mysql.database.azure.com';
-$db = 'user1_db';
-$user = 'nirupamashree';
-$password = 'password@123';
-$charset = 'utf8mb4';
+$servername = "sqlserver43.mysql.database.azure.com";
+$username = "nirupamashree";
+$password = "password@123";
+$database = "user1_db";
 
 // Create a connection to the MySQL server
 $conn = new mysqli($servername, $username, $password, $database);
