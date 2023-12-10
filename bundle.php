@@ -16,11 +16,18 @@ $facultyName = $_SESSION['username'];
 $successMessage = '';
 $errorMessage = '';
 
-// Include TCPDF library
-require_once('tcpdf/tcpdf.php');
-
-// Check if the form is submitted and download action is requested
+// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the remaining form data
+    $date = $_POST['date'];
+    $day = date('l', strtotime($date)); // Automatically fill the day based on the selected date
+    $slot = $_POST['slot'];
+    $venue = $_POST['venue'];
+    $classroom = $_POST['classroom'];
+    $noOfStudents = $_POST['noOfStudents'];
+    $noOfAbsentees = $_POST['noOfAbsentees'];
+    $noOfPapersCollected = $_POST['noOfPapersCollected'];
+
     // Connect to the database
     $servername = "sqlserver43.mysql.database.azure.com"; // Replace with your database server name
     $username = "nirupamashree"; // Replace with your database username
@@ -53,67 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Close the database connection
     $conn->close();
 }
-    // Get the remaining form data
-    $date = $_POST['date'];
-    $day = date('l', strtotime($date)); // Automatically fill the day based on the selected date
-    $slot = $_POST['slot'];
-    $venue = $_POST['venue'];
-    $classroom = $_POST['classroom'];
-    $noOfStudents = $_POST['noOfStudents'];
-    $noOfAbsentees = $_POST['noOfAbsentees'];
-    $noOfPapersCollected = $_POST['noOfPapersCollected'];
-
-    // Check if the record exists in the 'allocate' table
-    $sql = "SELECT * FROM allocate WHERE facultyName = '$facultyName' AND date = '$date' AND day = '$day' AND slot = '$slot'";
-    $result = $pdo->query($sql);
-
-    if ($result->rowCount() > 0) {
-        // The record exists, insert the form data into the 'bundle' table
-        $insertSql = "INSERT INTO bundle (facultyName, date, day, slot, venue, classroom, noOfStudents, noOfAbsentees, noOfPapersCollected) VALUES ('$facultyName', '$date', '$day', '$slot', '$venue', '$classroom', $noOfStudents, $noOfAbsentees, $noOfPapersCollected)";
-        if ($pdo->exec($insertSql) !== false) {
-            $successMessage = "Form submitted successfully.";
-
-            // Create a PDF document using TCPDF
-            $pdf = new TCPDF();
-            $pdf->SetAutoPageBreak(true, 10);
-            $pdf->AddPage();
-
-            // Output your form data to the PDF
-            $pdf->SetFont('helvetica', '', 12);
-            $pdf->Write(10, 'Bundle Submission Form');
-            $pdf->Ln();
-            $pdf->Write(10, 'Faculty Name: ' . $facultyName);
-            $pdf->Ln();
-            $pdf->Write(10, 'Date: ' . $date);
-            $pdf->Ln();
-            $pdf->Write(10, 'Day: ' . $day);
-            $pdf->Ln();
-            $pdf->Write(10, 'Slot: ' . $slot);
-            $pdf->Ln();
-            $pdf->Write(10, 'Venue: ' . $venue);
-            $pdf->Ln();
-            $pdf->Write(10, 'Classroom: ' . $classroom);
-            $pdf->Ln();
-            $pdf->Write(10, 'No. of Students: ' . $noOfStudents);
-            $pdf->Ln();
-            $pdf->Write(10, 'No. of Absentees: ' . $noOfAbsentees);
-            $pdf->Ln();
-            $pdf->Write(10, 'No. of Papers Collected: ' . $noOfPapersCollected);
-
-            // Output PDF for download
-            $pdf->Output('Bundle_Submission.pdf', 'D');
-            exit();
-        } else {
-            $errorMessage = "Error: " . $insertSql . "<br>" . $pdo->errorInfo()[2];
-        }
-    } else {
-        $errorMessage = "Record does not exist in the 'allocate' table.";
-    }
-}
 ?>
 
-<!-- Remaining HTML content unchanged -->
- 
 <!DOCTYPE html>
 <html>
 <head>
