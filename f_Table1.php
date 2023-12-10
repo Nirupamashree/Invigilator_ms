@@ -186,6 +186,8 @@
                 <?php endforeach; ?>
             </table>
         </div>
+        <h1>Faculty time-table</h1>
+        <img src="tt.jpg" alt="Timetable Image" style="max-width: 100%; height: auto; margin-top: 20px;">
         <?php endif; ?>
     </div>
 </body>
