@@ -215,15 +215,29 @@
         }
 
         if (isset($successMsg)) {
-            echo '<p class="alert success">' . $successMsg . ' <a href="' . $pdfFilePath . '" download="registration.pdf">Download PDF</a></p>';
+            echo '<p class="alert success">' . $successMsg . '</p>';
         }
         ?>
 
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <!-- (your existing HTML form) -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" pattern="[A-Za-z]+[0-9]*" title="Username must only contain alphanumeric characters." required>
+
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <input type="checkbox" id="password_visibility" onclick="togglePasswordVisibility()">
+            <label for="password_visibility">Show Password</label>
+
+            <input type="submit" name="submit" value="Register">
         </form>
     </div>
 
 </body>
-
 </html>
