@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>CREATE USER'S ACCOUNT</title>
     <style>
@@ -107,86 +108,104 @@
         }
     </script>
 </head>
+
 <body>
 
+    <?php
+    // Database connection
+    $host = 'sqlserver43.mysql.database.azure.com';
+    $db = 'user1_db';
+    $user = 'nirupamashree';
+    $password = 'password@123';
+    $charset = 'utf8mb4';
 
-<?php
-// Database connection
-$host = 'sqlserver43.mysql.database.azure.com';
-$db = 'user1_db';
-$user = 'nirupamashree';
-$password = 'password@123';
-$charset = 'utf8mb4';
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-try {
-    $pdo = new PDO($dsn, $user, $password, $options);
-} catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
-}
-
-// Function to validate password strength
-function validatePassword($password) {
-    // Password must be at least 6 characters long
-    if (strlen($password) < 6) {
-        return false;
+    try {
+        $pdo = new PDO($dsn, $user, $password, $options);
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
 
-    // Password must contain a combination of letters, numbers, and special characters
-    if (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[^A-Za-z0-9]/', $password)) {
-        return false;
+    // Function to validate password strength
+    function validatePassword($password) {
+        // Password must be at least 6 characters long
+        if (strlen($password) < 6) {
+            return false;
+        }
+
+        // Password must contain a combination of letters, numbers, and special characters
+        if (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[^A-Za-z0-9]/', $password)) {
+            return false;
+        }
+
+        return true;
     }
 
-    return true;
-}
+    // Handle form submission
+    if (isset($_POST['submit'])) {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $confirmPassword = $_POST['confirm_password'];
 
-// Handle form submission
-if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirmPassword = $_POST['confirm_password'];
+        $errorMsg = '';
 
-    $errorMsg = '';
+        // Check if username already exists in the database
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM user_form WHERE name = ?');
+        $stmt->execute([$name]);
+        $nameCount = $stmt->fetchColumn();
 
-    // Check if username already exists in the database
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM user_form WHERE name = ?');
-    $stmt->execute([$name]);
-    $nameCount = $stmt->fetchColumn();
+        // Check if email already exists in the database
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM user_form WHERE email = ?');
+        $stmt->execute([$email]);
+        $emailCount = $stmt->fetchColumn();
 
-    // Check if email already exists in the database
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM user_form WHERE email = ?');
-    $stmt->execute([$email]);
-    $emailCount = $stmt->fetchColumn();
+        if ($nameCount > 0) {
+            $errorMsg = 'Username already exists.';
+        } elseif ($emailCount > 0) {
+            $errorMsg = 'Email address is already registered.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errorMsg = 'Invalid email address.';
+        } elseif ($password !== $confirmPassword) {
+            $errorMsg = 'Password and confirm password do not match.';
+        } elseif (!validatePassword($password)) {
+            $errorMsg = 'Password must be at least 6 characters long and must contain a combination of letters, numbers, and special characters.';
+        } elseif (!preg_match('/^[A-Za-z]+[0-9]*$/', $name)) {
+            $errorMsg = 'Username must only contain alphanumeric characters.';
+        } else {
+            // Store user information in the database
+            $stmt = $pdo->prepare('INSERT INTO user_form (name, email, password) VALUES (?, ?, ?)');
+            $stmt->execute([$name, $email, $password]);
 
-    if ($nameCount > 0) {
-        $errorMsg = 'Username already exists.';
-    } elseif ($emailCount > 0) {
-        $errorMsg = 'Email address is already registered.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errorMsg = 'Invalid email address.';
-    } elseif ($password !== $confirmPassword) {
-        $errorMsg = 'Password and confirm password do not match.';
-    } elseif (!validatePassword($password)) {
-        $errorMsg = 'Password must be at least 6 characters long and must contain a combination of letters, numbers, and special characters.';
-    } elseif (!preg_match('/^[A-Za-z]+[0-9]*$/', $name)) {
-        $errorMsg = 'Username must only contain alphanumeric characters.';
-    } else {
-        // Store user information in the database
-        $stmt = $pdo->prepare('INSERT INTO user_form (name, email, password) VALUES (?, ?, ?)');
-        $stmt->execute([$name, $email, $password]);
+            // Generate PDF document
+            require_once('tcpdf.php');
+            $pdf = new TCPDF();
+            $pdf->AddPage();
+            $pdf->SetFont('Arial', 'B', 16);
+            $pdf->Cell(40, 10, 'User Registration Details');
+            $pdf->Ln();
+            $pdf->Cell(40, 10, 'Name: ' . $name);
+            $pdf->Ln();
+            $pdf->Cell(40, 10, 'Email: ' . $email);
+            $pdf->Ln();
+            // ... (add more details as needed)
 
-        $successMsg = 'Registration Successful!';
+            // Save the PDF to a file (you can adjust the path and filename as needed)
+            $pdfFilePath = 'Downloads/generated_pdf/' . $name . '_registration.pdf';
+            $pdf->Output($pdfFilePath, 'F');
+
+            $successMsg = 'Registration Successful!';
+        }
     }
-}
-?>
-<br><br><br><br><br>
+    ?>
+
+    <br><br><br><br><br>
     <div class="form-container">
         <h2>CREATE USER ACCOUNT</h2>
 
@@ -196,29 +215,15 @@ if (isset($_POST['submit'])) {
         }
 
         if (isset($successMsg)) {
-            echo '<p class="alert success">' . $successMsg . '</p>';
+            echo '<p class="alert success">' . $successMsg . ' <a href="' . $pdfFilePath . '" download="registration.pdf">Download PDF</a></p>';
         }
         ?>
 
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" pattern="[A-Za-z]+[0-9]*" title="Username must only contain alphanumeric characters." required>
-
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="email" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-
-            <input type="checkbox" id="password_visibility" onclick="togglePasswordVisibility()">
-            <label for="password_visibility">Show Password</label>
-
-            <input type="submit" name="submit" value="Register">
+            <!-- (your existing HTML form) -->
         </form>
     </div>
 
 </body>
+
 </html>
