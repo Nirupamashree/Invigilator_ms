@@ -22,25 +22,37 @@ require_once('tcpdf/tcpdf.php');
 // Check if the form is submitted and download action is requested
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Connect to the database
-    $host = 'sqlserver43.mysql.database.azure.com';
-    $db = 'user1_db';
-    $user = 'nirupamashree';
-    $password = 'password@123';
-    $charset = 'utf8mb4';
+    $servername = "sqlserver43.mysql.database.azure.com"; // Replace with your database server name
+    $username = "nirupamashree"; // Replace with your database username
+    $password = "password@123"; // Replace with your database password
+    $dbname = "user1_db"; // Replace with your database name
 
-    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-    try {
-        $pdo = new PDO($dsn, $user, $password, $options);
-    } catch (PDOException $e) {
-        die("Error: " . $e->getMessage());
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
 
+    // Check if the record exists in the 'allocate' table
+    $sql = "SELECT * FROM allocate WHERE facultyName = '$facultyName' AND date = '$date' AND day = '$day' AND slot = '$slot'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // The record exists, insert the form data into the 'bundle' table
+        $insertSql = "INSERT INTO bundle (facultyName, date, day, slot, venue, classroom, noOfStudents, noOfAbsentees, noOfPapersCollected) VALUES ('$facultyName', '$date', '$day', '$slot', '$venue', '$classroom', $noOfStudents, $noOfAbsentees, $noOfPapersCollected)";
+        if ($conn->query($insertSql) === TRUE) {
+            $successMessage = "Form submitted successfully.";
+        } else {
+            $errorMessage = "Error: " . $insertSql . "<br>" . $conn->error;
+        }
+    } else {
+        $errorMessage = "Record does not exist in the 'allocate' table.";
+    }
+
+    // Close the database connection
+    $conn->close();
+}
     // Get the remaining form data
     $date = $_POST['date'];
     $day = date('l', strtotime($date)); // Automatically fill the day based on the selected date
