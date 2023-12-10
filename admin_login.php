@@ -25,21 +25,14 @@ if (isset($_POST['submit'])) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Invalid email format";
     } else {
-        // Construct the URL of your Azure Function
-        $functionUrl = 'https://function43.azurewebsites.net/api/HttpTrigger1';
-        $code = 'CtbneX7Ybx1cY1NBmQuVcgxoRvv55Zm8is1vyrlVVsbvAzFuU-ZoDQ==';
+        $query = "SELECT * FROM admin_form WHERE email='$email' AND password='$pass'";
+        $result = mysqli_query($conn, $query);
 
-        // Append the credentials to the URL
-        $urlWithCredentials = "{$functionUrl}?code={$code}&username={$email}&password={$pass}";
-
-        // Make a request to the Azure Function
-        $response = file_get_contents($urlWithCredentials);
-        $responseData = json_decode($response, true);
-
-        if ($responseData && $responseData['status'] === 200) {
-            // Authentication successful
-            $userId = $responseData['userId'];
-            $username = $responseData['username'];
+        if (mysqli_num_rows($result) == 1) {
+            // User found, fetch user details
+            $row = mysqli_fetch_assoc($result);
+            $userId = $row['id'];
+            $username = $row['name'];
 
             // Store user information in session variables
             $_SESSION['userId'] = $userId;
@@ -54,7 +47,6 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-<!-- The rest of your HTML remains unchanged -->
 
 <!DOCTYPE html>
 <html>
