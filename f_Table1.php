@@ -114,7 +114,29 @@
 
         function showTable() {
             var facultyName = document.getElementById('faculty_name').value;
-            window.location.href = '?faculty_name=' + encodeURIComponent(facultyName);
+
+            if (facultyName.trim() === '') {
+                showAlert("Please enter a valid faculty name.");
+                return;
+            }
+
+            // Create a new jsPDF instance
+            var pdf = new jsPDF();
+
+            // Set the header
+            pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
+
+            // Get the table element
+            var table = document.querySelector('.table-container table');
+
+            // Convert the table to a data URL
+            var dataURL = table.toDataURL();
+
+            // Add the image of the table to the PDF
+            pdf.addImage(dataURL, 'JPEG', 10, 20);
+
+            // Save the PDF
+            pdf.save(facultyName + '_timetable.pdf');
         }
     </script>
 </head>
