@@ -74,37 +74,68 @@
             </thead>
             <tbody>
                 <?php
+                require_once('tcpdf.php');
+
                 $servername = "sqlserver43.mysql.database.azure.com";
                 $username = "nirupamashree";
                 $password = "password@123";
                 $dbname = "user1_db";
 
-                // Create connection
+// Create connection
                 $conn = new mysqli($servername, $username, $password, $dbname);
 
-                // Check connection
+// Check connection
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
 
-                // Fetch records from the allocate table
+// Fetch records from the allocate table
                 $sql = "SELECT * FROM `{$dbname}`.`allocate`";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
+                    $pdf = new TCPDF();
+
+    // Set document properties
+                    $pdf->SetCreator('Your Name');
+                    $pdf->SetAuthor('Your Name');
+                    $pdf->SetTitle('Allocated Records');
+
+    // Add a page
+                    $pdf->AddPage();
+
+    // Set font
+                    $pdf->SetFont('Arial', 'B', 12);
+
+    // Add table headers
+                    $pdf->Cell(30, 10, 'Faculty Name', 1);
+                    $pdf->Cell(20, 10, 'Semester', 1);
+                    $pdf->Cell(20, 10, 'Course', 1);
+                    $pdf->Cell(25, 10, 'Date', 1);
+                    $pdf->Cell(20, 10, 'Day', 1);
+                    $pdf->Cell(20, 10, 'Slot', 1);
+                    $pdf->Cell(25, 10, 'Venue', 1);
+
+    // Add table rows
                     while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>{$row['facultyName']}</td>";
-                        echo "<td>{$row['semester']}</td>";
-                        echo "<td>{$row['course']}</td>";
-                        echo "<td>{$row['date']}</td>";
-                        echo "<td>{$row['day']}</td>";
-                        echo "<td>{$row['slot']}</td>";
-                        echo "<td>{$row['venue']}</td>";
-                        echo "</tr>";
+                        $pdf->Ln(); // Move to the next line
+                        $pdf->Cell(30, 10, $row['facultyName'], 1);
+                        $pdf->Cell(20, 10, $row['semester'], 1);
+                        $pdf->Cell(20, 10, $row['course'], 1);
+                        $pdf->Cell(25, 10, $row['date'], 1);
+                        $pdf->Cell(20, 10, $row['day'], 1);
+                        $pdf->Cell(20, 10, $row['slot'], 1);
+                        $pdf->Cell(25, 10, $row['venue'], 1);
                     }
+
+    // Save the PDF to a file
+                    $pdfFileName = 'allocated_records.pdf';
+                    $pdf->Output($pdfFileName, 'F');
+
+    // Provide a download link
+                    echo "<a href='{$pdfFileName}' download>Generate PDF</a>";
                 } else {
-                    echo "<tr><td colspan='7'>No records found.</td></tr>";
+                    echo "No records found.";
                 }
 
                 $conn->close();
