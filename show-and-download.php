@@ -1,5 +1,23 @@
 <?php
-// Your existing PHP code remains unchanged
+// Database connection
+$host = 'sqlserver43.mysql.database.azure.com';
+$db = 'user1_db';
+$user = 'nirupamashree';
+$password = 'password@123';
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $password, $options);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
 
 require('tcpdf/tcpdf.php');
 
