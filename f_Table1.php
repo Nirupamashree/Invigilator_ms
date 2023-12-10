@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>Faculty Table Viewer</title>
     <style>
@@ -107,74 +107,26 @@
             margin-bottom: 10px;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
-        <script>
-    function showAlert(message) {
-        alert(message);
-    }
-
-    function showTable() {
-        var facultyName = document.getElementById('faculty_name').value;
-
-        if (facultyName.trim() === '') {
-            showAlert("Please enter a valid faculty name.");
-            return;
+        function showAlert(message) {
+            alert(message);
         }
 
-        var tableContainer = document.querySelector('.table-container');
-        var tableHTML = tableContainer.innerHTML;
-
-        if (tableHTML.trim() === '') {
-            showAlert("Table is empty. Please make sure to populate the table before downloading.");
-            return;
+        function showTable() {
+            var facultyName = document.getElementById('faculty_name').value;
+            window.location.href = '?faculty_name=' + encodeURIComponent(facultyName);
         }
-
-        // Create a new jsPDF instance
-        var pdf = new jsPDF();
-
-        // Set the header
-        pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
-
-        // Convert the table HTML to data URL
-        var dataURL = htmlToDataURL(tableHTML);
-
-        // Add the image of the table to the PDF
-        pdf.addImage(dataURL, 'JPEG', 10, 20);
-
-        // Save the PDF
-        pdf.save(facultyName + '_timetable.pdf');
-    }
-
-    // Function to convert HTML to data URL
-    function htmlToDataURL(html) {
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        var dataURL;
-
-        canvas.width = 1000; // Adjust the width as needed
-        canvas.height = 1000; // Adjust the height as needed
-
-        var img = new Image();
-
-        img.onload = function () {
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            dataURL = canvas.toDataURL('image/jpeg');
-        };
-
-        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(html)));
-
-        return dataURL;
-    }
     </script>
 </head>
 <body>
     <?php
+    // Database connection
     $host = 'sqlserver43.mysql.database.azure.com';
     $db = 'user1_db';
     $user = 'nirupamashree';
     $password = 'password@123';
     $charset = 'utf8mb4';
+
 
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
     $options = [
@@ -216,7 +168,7 @@
             <br>
         </div>
 
-       <?php if ($showTable): ?>
+        <?php if ($showTable): ?>
         <div class="table-container">
             <h2>Faculty: <?php echo $facultyName; ?></h2>
             <table>
