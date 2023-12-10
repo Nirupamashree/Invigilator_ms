@@ -109,58 +109,63 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
-        function showAlert(message) {
-            alert(message);
+        <script>
+    function showAlert(message) {
+        alert(message);
+    }
+
+    function showTable() {
+        var facultyName = document.getElementById('faculty_name').value;
+
+        if (facultyName.trim() === '') {
+            showAlert("Please enter a valid faculty name.");
+            return;
         }
 
-        function showTable() {
-            var facultyName = document.getElementById('faculty_name').value;
+        var tableContainer = document.querySelector('.table-container');
+        var tableHTML = tableContainer.innerHTML;
 
-            if (facultyName.trim() === '') {
-                showAlert("Please enter a valid faculty name.");
-                return;
-            }
-
-            // Create a new jsPDF instance
-            var pdf = new jsPDF();
-
-            // Set the header
-            pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
-
-            // Get the table element
-            var table = document.querySelector('.table-container table');
-
-            // Convert the table to a data URL
-            var dataURL = tableToDataURL(table);
-
-            // Add the image of the table to the PDF
-            pdf.addImage(dataURL, 'JPEG', 10, 20);
-
-            // Save the PDF
-            pdf.save(facultyName + '_timetable.pdf');
+        if (tableHTML.trim() === '') {
+            showAlert("Table is empty. Please make sure to populate the table before downloading.");
+            return;
         }
 
-        // Function to convert a table to data URL
-        function tableToDataURL(table) {
-            var ctx = document.createElement('canvas').getContext('2d');
-            var dataURL;
+        // Create a new jsPDF instance
+        var pdf = new jsPDF();
 
-            // Draw the table on a canvas
-            var tableWidth = table.offsetWidth;
-            var tableHeight = table.offsetHeight;
-            ctx.canvas.width = tableWidth;
-            ctx.canvas.height = tableHeight;
-            var img = new Image();
+        // Set the header
+        pdf.text(10, 10, 'Faculty Timetable: ' + facultyName);
 
-            // Create a data URL from the canvas
-            img.onload = function() {
-                ctx.drawImage(img, 0, 0, tableWidth, tableHeight);
-                dataURL = ctx.canvas.toDataURL('image/jpeg');
-            };
-            img.src = 'data:image/svg+xml;base64,' + btoa(new XMLSerializer().serializeToString(table));
+        // Convert the table HTML to data URL
+        var dataURL = htmlToDataURL(tableHTML);
 
-            return dataURL;
-        }
+        // Add the image of the table to the PDF
+        pdf.addImage(dataURL, 'JPEG', 10, 20);
+
+        // Save the PDF
+        pdf.save(facultyName + '_timetable.pdf');
+    }
+
+    // Function to convert HTML to data URL
+    function htmlToDataURL(html) {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        var dataURL;
+
+        canvas.width = 1000; // Adjust the width as needed
+        canvas.height = 1000; // Adjust the height as needed
+
+        var img = new Image();
+
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            dataURL = canvas.toDataURL('image/jpeg');
+        };
+
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(html)));
+
+        return dataURL;
+    }
     </script>
 </head>
 <body>
