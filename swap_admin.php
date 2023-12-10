@@ -17,23 +17,6 @@ if ($conn->connect_error) {
 // Retrieve data from the accept table
 $sql = "SELECT * FROM accept";
 $result = $conn->query($sql);
-
-// Initialize data array for table and PDF
-$data = array();
-$data[] = array("Faculty Name(REQUESTED)", "Faculty Name(ACCEPTED)", "Date", "Day", "Slot", "Venue");
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $data[] = array(
-            $row["request_to"],
-            $row["request_from"],
-            $row["date"],
-            $row["day"],
-            $row["slot"],
-            $row["venue"]
-        );
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -81,18 +64,6 @@ if ($result->num_rows > 0) {
             border-radius: 3px;
             cursor: pointer;
         }
-
-        .download-button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #3498db;
-            color: #fff;
-            text-decoration: none;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -112,18 +83,23 @@ if ($result->num_rows > 0) {
             </thead>
             <tbody>
                 <?php
-                foreach ($data as $row) {
-                    echo "<tr>";
-                    foreach ($row as $cell) {
-                        echo "<td>$cell</td>";
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row["request_to"] . "</td>";
+                        echo "<td>" . $row["request_from"] . "</td>";
+                        echo "<td>" . $row["date"] . "</td>";
+                        echo "<td>" . $row["day"] . "</td>";
+                        echo "<td>" . $row["slot"] . "</td>";
+                        echo "<td>" . $row["venue"] . "</td>";
+                        echo "</tr>";
                     }
-                    echo "</tr>";
+                } else {
+                    echo "<tr><td colspan='5'>No accepted requests found.</td></tr>";
                 }
                 ?>
             </tbody>
         </table>
-
-        <a class="download-button" href="generate_pdf.php" target="_blank">Download PDF</a>
     </div>
 
     <script>
@@ -134,3 +110,4 @@ if ($result->num_rows > 0) {
     </script>
 </body>
 </html>
+
